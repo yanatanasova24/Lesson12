@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+
+<script>
+    let url = new URL(location.href);
+    let userId = url.searchParams.get('id');
+    //let user = JSON.parse(userJSON);
+
+    fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+        .then((response) => response.json())
+        .then(user =>{
+            let userWrap = document.createElement('div')
+            let createHtml = (key, obj)=>{
+                let bold = document.createElement('b');
+                let text = document.createElement('p');
+                bold.innerText = key;
+                text.innerText = obj[key];
+                userWrap.appendChild(bold);
+                userWrap.appendChild(text);
+            }
+            let {address: address, company: company, ...other} = user;
+            for( let key in other){
+                    createHtml(key, other);
+                }
+            let {geo: geo, ...add} = address;
+            for (let key in add){
+                createHtml(key, add);
+            }
+            for (let key in geo){
+                createHtml(key, geo);
+            }
+            for (let key in company){
+                createHtml(key, company);
+            }
+            document.body.append(userWrap);
+        });
+</script>
+</body>
+</html>
